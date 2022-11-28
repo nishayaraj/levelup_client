@@ -20,8 +20,9 @@ const createEvent = (event) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-const deleteThisEvent = (id) => fetch(`http://localhost:8000/events/${id}`)
-  .then((response) => response.json());
+const deleteThisEvent = (id) => fetch(`http://localhost:8000/events/${id}`, {
+  method: 'DELETE',
+});
 
 // eslint-disable-next-line import/prefer-default-export
 export { getEvents, createEvent, deleteThisEvent };

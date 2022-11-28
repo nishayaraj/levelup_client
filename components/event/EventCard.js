@@ -3,11 +3,12 @@ import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { deleteThisEvent } from '../../utils/data/eventData';
 
-const EventCard = ({ eventObj }) => {
+const EventCard = ({ eventObj, onUpdate }) => {
   const deleteEvent = () => {
     if (window.confirm(`Delete ${eventObj.description}?`)) {
       deleteThisEvent(eventObj.id).then(() => {
-        window.location.reload();
+        onUpdate();
+        // window.location.reload();
       });
     }
   };
@@ -34,6 +35,7 @@ EventCard.propTypes = {
     date: PropTypes.string,
     time: PropTypes.string,
   }).isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default EventCard;

@@ -13,7 +13,7 @@ export default function EditGame() {
   }, [id]);
 
   return (
-    <div className="create-form" style={{ height: '45rem', padding: '10%' }}>
+    <div className="editGameForm" style={{ height: '45rem', padding: '10%' }}>
       <GameForm obj={editGame} />
     </div>
   );
