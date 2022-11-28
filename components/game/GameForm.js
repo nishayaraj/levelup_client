@@ -30,6 +30,7 @@ const GameForm = ({ user }) => {
       ...prevState,
       [name]: value,
     }));
+    console.warn(currentGame);
   };
 
   const handleSubmit = (e) => {
@@ -41,7 +42,7 @@ const GameForm = ({ user }) => {
       title: currentGame.title,
       number_of_players: Number(currentGame.numberOfPlayers),
       skill_level: Number(currentGame.skillLevel),
-      game_type: Number(currentGame.gameTypeId) + 1,
+      game_type: Number(currentGame.gameTypeId),
       user_id: user.uid,
     };
 
@@ -96,6 +97,7 @@ const GameForm = ({ user }) => {
           <Form.Select
             className="mb-3"
             onChange={handleChange}
+            name="gameTypeId"
           >
             <option value="">Select a Category</option>
             {gameTypes?.map((gameType) => (

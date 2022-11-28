@@ -25,9 +25,9 @@ function Home() {
           Register New Game
         </Button>
       </h2>
-      {games.map((game) => (
+      {games.length > 0 && games.map((game) => (
         <section key={`game--${game.id}`} className="game">
-          <GameCard title={game.title} maker={game.maker} numberOfPlayers={game.number_of_players} skillLevel={game.skill_level} />
+          <GameCard gameObj={game} />
         </section>
       ))}
     </article>

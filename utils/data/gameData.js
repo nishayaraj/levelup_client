@@ -7,6 +7,9 @@ const getGames = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const getGamesById = (id) => fetch(`http://localhost:8000/games/${id}`)
+  .then((response) => response.json);
+
 const createGame = (game) => new Promise((resolve, reject) => {
   fetch('http://localhost:8000/games', {
     method: 'POST',
@@ -27,5 +30,11 @@ const getGameTypes = () => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
+const deleteThisGame = (id) => fetch(`http://localhost:8000/games/${id}`, {
+  method: 'DELETE',
+});
+
 // eslint-disable-next-line import/prefer-default-export
-export { getGames, createGame, getGameTypes };
+export {
+  getGames, createGame, getGameTypes, deleteThisGame, getGamesById,
+};
