@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import Link from 'next/link';
 import { Card, Button } from 'react-bootstrap';
 import { deleteThisEvent } from '../../utils/data/eventData';
 
@@ -12,13 +13,16 @@ const EventCard = ({ eventObj, onUpdate }) => {
       });
     }
   };
-  // DELETE IS NOT FUNCTIONING
+
   return (
     <Card className="text-center">
       <Card.Header>Event</Card.Header>
       <Card.Body>
         <Card.Title>{eventObj.description}</Card.Title>
         <Card.Text>Date: {eventObj.date} </Card.Text>
+        <Link href={`/events/edit/${eventObj.id}`} passHref>
+          <Button variant="info">EDIT</Button>
+        </Link>
         <Button variant="danger" onClick={deleteEvent} className="m-2">
           DELETE
         </Button>

@@ -24,5 +24,21 @@ const deleteThisEvent = (id) => fetch(`http://localhost:8000/events/${id}`, {
   method: 'DELETE',
 });
 
+const getEventsById = (id) => fetch(`http://localhost:8000/events/${id}`)
+  .then((response) => response.json());
+
+const updateEvent = (event) => fetch(`http://localhost:8000/events/${event.id}`, {
+  method: 'PUT',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(event),
+})
+  .then((response) => response.json())
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 // eslint-disable-next-line import/prefer-default-export
-export { getEvents, createEvent, deleteThisEvent };
+export {
+  getEvents, createEvent, deleteThisEvent, getEventsById, updateEvent,
+};

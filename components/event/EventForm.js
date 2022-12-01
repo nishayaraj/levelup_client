@@ -1,25 +1,50 @@
 import { useRouter } from 'next/router';
-import PropTypes from 'prop-types';
+import PropTypes, { string, number } from 'prop-types';
 import { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { getGames } from '../../utils/data/gameData';
-import { createEvent } from '../../utils/data/eventData';
+import { createEvent, updateEvent } from '../../utils/data/eventData';
+import { useAuth } from '../../utils/context/authContext';
 
-const EventForm = ({ user }) => {
-  const [games, setGames] = useState([]);
-  /*
-  Since the input fields are bound to the values of
-  the properties of this state variable, you need to
-  provide some default values.
-  */
-  const [currentEvent, setCurrentEvent] = useState({
-    description: '',
-    time: '',
-    date: '',
-    game: 0,
-    organizer: 1,
-  });
+const defaultEventObj = {
+  id: 0,
+  description: '',
+  time: '',
+  date: '',
+  game: {
+    id: 0,
+    title: '',
+    maker: '',
+  },
+  organizer: {
+    id: 0,
+    bio: '',
+    uid: '',
+  },
+};
+
+const EventForm = ({ eventObj = defaultEventObj }) => {
   const router = useRouter();
+  const { user } = useAuth();
+  const [games, setGames] = useState([]);
+
+  const [currentEvent, setCurrentEvent] = useState({
+    description: defaultEventObj?.description,
+    time: defaultEventObj?.time,
+    date: defaultEventObj?.date,
+    game: defaultEventObj?.game?.id,
+    id: defaultEventObj?.id,
+  });
+
+  useEffect(() => {
+    setCurrentEvent({
+      description: eventObj?.description,
+      time: eventObj?.time,
+      date: eventObj?.date,
+      game: eventObj?.game?.id,
+      id: eventObj?.id,
+    });
+  }, [eventObj]);
 
   useEffect(() => {
     getGames().then((data) => setGames(data));
@@ -31,23 +56,25 @@ const EventForm = ({ user }) => {
       ...prevState,
       [name]: value,
     }));
-    console.warn(name, value);
+  };
+
+  const handleGameChange = (e) => {
+    if (e?.target?.value) {
+      setCurrentEvent({ ...currentEvent, game: Number(e.target.value) });
+    }
   };
 
   const handleSubmit = (e) => {
     // Prevent form from being submitted
     e.preventDefault();
 
-    const event = {
-      description: currentEvent.description,
-      time: currentEvent.time,
-      date: currentEvent.date,
-      game: Number(currentEvent.game),
-      organizer: user.uid,
-    };
-
-    // Send POST request to your API
-    createEvent(event).then(() => router.push('/events'));
+    if (currentEvent.id !== 0) {
+      updateEvent(currentEvent).then(() => router.push('/events'));
+    } else {
+      const newEvent = { ...currentEvent, organizer: user.uid };
+      delete newEvent.id;
+      createEvent(newEvent).then(() => router.push('/events'));
+    }
   };
 
   return (
@@ -86,12 +113,12 @@ const EventForm = ({ user }) => {
         <Form.Group>
           <Form.Select
             className="mb-3"
-            onChange={handleChange}
+            onChange={handleGameChange}
             name="game"
           >
             <option value="">Select a Game</option>
             {games?.map((game) => (
-              <option key={game.id} value={game.id}>
+              <option key={game.id} value={game.id} selected={game.id === currentEvent.game}>
                 {game.title}
               </option>
             ))}
@@ -107,8 +134,21 @@ const EventForm = ({ user }) => {
 };
 
 EventForm.propTypes = {
-  user: PropTypes.shape({
-    uid: PropTypes.string.isRequired,
+  eventObj: PropTypes.shape({
+    id: number,
+    description: string,
+    time: string,
+    date: string,
+    game: PropTypes.shape({
+      id: number,
+      title: string,
+      maker: string,
+    }),
+    organizer: PropTypes.shape({
+      id: number,
+      bio: string,
+      uid: string,
+    }),
   }).isRequired,
 };
 
