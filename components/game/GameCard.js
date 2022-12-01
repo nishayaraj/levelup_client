@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Card, Button } from 'react-bootstrap';
-// import Link from 'next/link';
+import Link from 'next/link';
 import { deleteThisGame } from '../../utils/data/gameData';
 
 const GameCard = ({ gameObj }) => {
@@ -19,14 +19,14 @@ const GameCard = ({ gameObj }) => {
       <Card.Body>
         <Card.Title>By: {gameObj.maker}</Card.Title>
         <Card.Text>{gameObj.numberOfPlayers} players needed</Card.Text>
-        {/* <Link href={`/games/edit/${gameObj.id}`} passHref>
+        <Link href={`/games/edit/${gameObj.id}`} passHref>
           <Button variant="info">EDIT</Button>
-        </Link> */}
+        </Link>
         <Button variant="danger" onClick={deleteGame} className="m-2">
           DELETE
         </Button>
       </Card.Body>
-      <Card.Footer className="text-muted">Skill Level: {gameObj.skillLevel}</Card.Footer>
+      <Card.Footer className="text-muted">Skill Level: {gameObj.skillLevel} </Card.Footer>
     </Card>
   );
 };
